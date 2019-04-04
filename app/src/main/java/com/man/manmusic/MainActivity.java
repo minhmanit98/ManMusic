@@ -78,15 +78,15 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             @Override
             public void onClick(View view) {
                 mCoverView.morph();
-//                mServ.start();
-//                if (mCoverView.isRunning()) {
-//                    mCoverView.stop();
-//                    mServ.pause();
-//
-//                } else {
-//                    mCoverView.morph();
-//
-//                }
+                mServ.start();
+                if (mCoverView.isRunning()) {
+                    mCoverView.stop();
+                    mServ.pause();
+
+                } else {
+                    mCoverView.morph();
+
+                }
             }
         });
     }

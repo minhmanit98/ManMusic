@@ -1,0 +1,87 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingLeft="10dp"
+    android:paddingTop="5dp"
+  >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/songImage"
+            android:layout_width="75dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:padding="3dp" />
+
+        <LinearLayout
+            android:id="@+id/namesong"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/songImage"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp">
+
+
+            <TextView
+                android:id="@+id/tv_SongName"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_SongArtist"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:paddingTop="3dp"
+                android:singleLine="true"
+                android:textSize="13sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="wrap_content"
+            android:orientation="horizontal"
+
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/namesong">
+            <TextView android:id="@+id/tv_SongTime"
+                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3:53"
+                android:textSize="13dp"
+                android:textColor="#FFFFFF"
+                android:paddingRight="10dp"
+               />
+            <ImageView android:id="@+id/iv_LoveSong"
+                android:layout_width="0dp"
+                android:scaleType="centerInside"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+            <ImageView android:id="@+id/bt_Setting"
+                android:layout_width="0dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/dots"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

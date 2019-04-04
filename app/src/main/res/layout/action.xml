@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:background="#9c27b0"
+              android:layout_height="wrap_content">
+    <Button android:id="@+id/bt_ShowInfor"
+            android:textColor="#FFFFFF"
+            android:layout_width="match_parent"
+            android:text="Information"
+            android:layout_height="wrap_content"/>
+    <Button android:id="@+id/bt_Delete"
+            android:textColor="#FFFFFF"
+            android:layout_width="match_parent"
+            android:text="Delete"
+            android:layout_height="wrap_content"/>
+    <Button android:id="@+id/bt_SaveLoveSong"
+            android:textColor="#FFFFFF"
+            android:layout_width="match_parent"
+            android:text="Love Song"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>
