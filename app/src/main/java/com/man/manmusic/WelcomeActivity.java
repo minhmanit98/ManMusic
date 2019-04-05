@@ -16,19 +16,24 @@ import com.man.manmusic.R;
 public class WelcomeActivity extends AppCompatActivity {
 
     private ImageView welcomeView;
+    private ImageView welcomeView2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
         welcomeView = (ImageView) findViewById(R.id.logo);
-        startAnimation();
+        welcomeView2= (ImageView) findViewById(R.id.logo2);
+        startAnimation(welcomeView2);
+        startAnimation(welcomeView);
     }
 
-    public void startAnimation() {
-        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(welcomeView, "scaleX", 0f, 1f);
-        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(welcomeView, "scaleY", 0f, 1f);
-        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(welcomeView, "alpha", 0f, 1f);
+    public void startAnimation(ImageView imageView) {
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(imageView, "scaleX", 0f, 1f);
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(imageView, "scaleY", 0f, 1f);
+        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(imageView, "alpha", 0f, 1f);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.play(alphaAnimator).with(scaleXAnimator).with(scaleYAnimator);
         animatorSet.setDuration(1000);
@@ -58,7 +63,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void hasLogin() {
-       Intent intent = new Intent(getApplicationContext(),PlayActivity.class);
+       Intent intent = new Intent(getApplicationContext(),MyActivity.class);
        startActivity(intent);
         finish();
     }

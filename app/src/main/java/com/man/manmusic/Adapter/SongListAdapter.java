@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -36,7 +37,7 @@ public class SongListAdapter extends BaseAdapter {
     }
 
     public void addSong() {
-        ItemSong itemSong = new ItemSong("aaaa", "Duanaonhi", "Hahahaa", "Yeeee", "GiangHoang", 500,image);
+        ItemSong itemSong = new ItemSong(1, "Duanaonhi", "Hahahaa", "Yeeee", "GiangHoang", "222",66);
         arraySong.add(itemSong);
     }
 
@@ -70,26 +71,25 @@ public class SongListAdapter extends BaseAdapter {
             convertView.setTag(holder);
         }
         holder = (ViewHolder) convertView.getTag();
+
         holder.tvSongName.setText(arraySong.get(position).getTitle());
         holder.tvSongArtist.setText(arraySong.get(position).getArtist());
         holder.btSetting.setImageResource(R.drawable.dots);
         SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
         holder.tvSongTime.setText(dateFormat.format(new Date(arraySong.get(position).getDuration())));
-        Bitmap artWork = arraySong.get(position).getSongImage();
-        if (artWork == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setMessage("this podcast have no image");
-            builder.setNeutralButton("OK", null);
-            AlertDialog alert = builder.create();
-            alert.show();
-
-        } else {
-
-            // set output
-            holder.songImage.setImageBitmap(artWork);
-
-
-        }
+//        Bitmap artWork = arraySong.get(position).getSongImage();
+//        if (artWork == null) {
+//
+//
+//        } else {
+//
+//            // set output
+//            holder.songImage.setImageBitmap(artWork);
+//
+//
+//        }
+        byte[] bytes = arraySong.get(position).getAlbum_Art(mContext);
+        holder.songImage.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
 
 
         final ViewHolder finalHolder = holder;

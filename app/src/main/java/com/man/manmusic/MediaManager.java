@@ -12,15 +12,14 @@ import android.util.Log;
 import com.man.manmusic.Model.ItemSong;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-/**
- * Created by Admin on 1/01/2016.
- */
-public class MediaManager implements MediaPlayer.OnCompletionListener {
+
+public class MediaManager implements MediaPlayer.OnCompletionListener, Serializable {
     private Context mContext;
     private ArrayList<ItemSong> arrSongs = new ArrayList<>();
 
@@ -48,6 +47,7 @@ public class MediaManager implements MediaPlayer.OnCompletionListener {
 
     public void getAllAudioSongs() {
         String cols[] = new String[]{
+                MediaStore.Audio.Media._ID,
                 MediaStore.Audio.Media.DATA,
                 MediaStore.Audio.Media.TITLE,
                 MediaStore.Audio.Media.DISPLAY_NAME,
@@ -60,27 +60,28 @@ public class MediaManager implements MediaPlayer.OnCompletionListener {
                 cols, null, null, null, null);
         if (cursor == null)
             return;
-
-        int indexData = cursor.getColumnIndex(cols[0]);
-        int indexTitle = cursor.getColumnIndex(cols[1]);
-        int indexDisplayName = cursor.getColumnIndex(cols[2]);
-        int indexDuration = cursor.getColumnIndex(cols[3]);
-        int indexAlbum = cursor.getColumnIndex(cols[4]);
-        int indexArtist = cursor.getColumnIndex(cols[5]);
-
+        int indexId = cursor.getColumnIndex(cols[0]);
+        int indexData = cursor.getColumnIndex(cols[1]);
+        int indexTitle = cursor.getColumnIndex(cols[2]);
+        int indexDisplayName = cursor.getColumnIndex(cols[3]);
+        int indexDuration = cursor.getColumnIndex(cols[4]);
+        int indexAlbum = cursor.getColumnIndex(cols[5]);
+        int indexArtist = cursor.getColumnIndex(cols[6]);
+        long id;
         String dataPath, title, displayName, album, artist;
         int duration;
         cursor.moveToFirst();
 
         arrSongs.clear();
         while (!cursor.isAfterLast()) {
+            id=cursor.getLong(indexId);
             dataPath = cursor.getString(indexData);
             title = cursor.getString(indexTitle);
             displayName = cursor.getString(indexDisplayName);
             album = cursor.getString(indexAlbum);
             artist = cursor.getString(indexArtist);
             duration = cursor.getInt(indexDuration);
-            arrSongs.add(new ItemSong(dataPath, title, displayName, album, artist, duration,getImageFromMp3File(dataPath)));
+            arrSongs.add(new ItemSong(id,dataPath, title, displayName, album, artist, duration));
             cursor.moveToNext();
         }
         cursor.close();
@@ -201,7 +202,7 @@ public class MediaManager implements MediaPlayer.OnCompletionListener {
 
     }
     public Bitmap getImage() {
-        return arrSongs.get(currentIndex).getSongImage();
+        return getImageFromMp3File(arrSongs.get(currentIndex).getDataPath());
     }
     public String getCurrentSongName() {
         return arrSongs.get(currentIndex).getArtist();

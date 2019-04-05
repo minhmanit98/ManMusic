@@ -9,7 +9,7 @@
                   android:orientation="horizontal"
                   android:background="#9c27b0"
                   android:layout_weight="1">
-        <ImageView android:id="@+id/bt_Back"
+        <ImageView android:id="@+id/menuback"
                    android:layout_width="0dp"
                    android:scaleType="centerInside"
                    android:src="@drawable/keyboardbackspace"

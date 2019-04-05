@@ -82,12 +82,7 @@
                     app:cardElevation="10dp"
                     android:layout_marginTop="15dp">
 
-                    <com.man.manmusic.Animations.MusicCoverView
-                        android:id="@+id/cover"
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:src="@drawable/album"
-                        android:scaleType="centerCrop"/>
+
                     <ImageView
                         android:id="@+id/songImage"
                         android:layout_width="match_parent"
@@ -157,10 +152,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:maxHeight="2dp"
-                    android:progress="30"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
-                    android:tag="tint_accent_color"
+
                     android:layout_marginTop="10dp"/>
 
 
@@ -211,6 +205,7 @@
                         app:materialIcon="shuffle"
                         app:materialIconColor="#fff"
                         app:materialIconSize="35dp"
+                        android:layout_weight="1"
                         />
 
                     <net.steamcrafted.materialiconlib.MaterialIconView
@@ -224,12 +219,21 @@
                         app:materialIconColor="#fff"
                         app:materialIconSize="35dp" />
 
+                    <com.man.manmusic.Animations.MusicCoverView
+                        android:id="@+id/cover"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/album"
+                        android:scaleType="centerCrop"
+                        android:layout_weight="1"/>
+
                     <ImageView android:id="@+id/bt_StartPause"
                         android:layout_width="0dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/pause"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_height="0dp"
+                        android:layout_weight="0"
+                        />
 
                     <net.steamcrafted.materialiconlib.MaterialIconView
                         android:id="@+id/bt_Next"

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <ListView android:id="@+id/lv_SongList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:background="@color/window_background_dark"></ListView>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/topContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="60dp"
+    android:layout_gravity="top"
+    android:background="?attr/windowBackground"
+    >
+
+    <ImageView
+        android:id="@+id/songImage"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_alignParentLeft="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/album"
+        android:layout_marginLeft="5dp"/>
+
+    <ImageView android:id="@+id/bt_StartPause"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/pause"
+
+        android:layout_marginRight="17dp"
+        android:layout_marginTop="20dp"
+
+        android:layout_alignParentRight="true"
+        />
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/songImage"
+        android:orientation="vertical">
+
+        <SeekBar
+            android:id="@+id/seekBar"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:maxHeight="5dp"
+            android:progress="30"
+             />
+
+        <TextView
+            android:id="@+id/tv_SongName2"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="42dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_SongArtist2"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:ellipsize="end"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:textSize="13sp" />
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+</RelativeLayout>
+
+
+
+</LinearLayout>

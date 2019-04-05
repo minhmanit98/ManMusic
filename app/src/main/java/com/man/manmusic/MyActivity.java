@@ -25,12 +25,17 @@ import android.widget.Toast;
 import com.man.manmusic.Adapter.SongListAdapter;
 import com.man.manmusic.Sensor.ShakeDetector;
 
+
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MyActivity extends Activity implements AdapterView.OnItemClickListener, View.OnClickListener, ShakeDetector.OnShakeListener {
+
+
+public class MyActivity extends Activity implements AdapterView.OnItemClickListener, View.OnClickListener, ShakeDetector.OnShakeListener{
     private ListView lvSong;
-    private MediaManager mediaManager;
+    public static MediaManager mediaManager;
+
     private static SongListAdapter mSongListAdapter;
     private Handler handler = new Handler();
     private boolean run = false;
@@ -52,8 +57,8 @@ public class MyActivity extends Activity implements AdapterView.OnItemClickListe
     private static String state;
     private static String looping;
     private static String shuffling;
-    private static boolean IS_RUNNING = false;
-
+    private static boolean IS_RUNNING = true;
+    private ImageView songImage;
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private ShakeDetector mShakeDetector;
@@ -61,7 +66,9 @@ public class MyActivity extends Activity implements AdapterView.OnItemClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        setContentView(R.layout.main);
+        setContentView(R.layout.main3);
+
+        mediaManager= new MediaManager(this);
         initView();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager
@@ -69,6 +76,8 @@ public class MyActivity extends Activity implements AdapterView.OnItemClickListe
         mShakeDetector = new ShakeDetector();
 
         mShakeDetector.setOnShakeListener(this);
+        initSongDisplay();
+
     }
 
     private void initView() {
@@ -76,8 +85,9 @@ public class MyActivity extends Activity implements AdapterView.OnItemClickListe
 
         lvSong = (ListView) findViewById(R.id.lv_SongList);
 
-        mediaManager = new MediaManager(this);
+
         mediaManager.getAllAudioSongs();
+
         mSongListAdapter = new SongListAdapter(this, mediaManager.getArrSongs());
         lvSong.setAdapter(mSongListAdapter);
         lvSong.setOnItemClickListener(this);
@@ -88,22 +98,24 @@ public class MyActivity extends Activity implements AdapterView.OnItemClickListe
         looping = NOLOOP;
         shuffling = NOSHUFFLE;
         btStartPause = (ImageView) findViewById(R.id.bt_StartPause);
-        btShuffle = (ImageView) findViewById(R.id.bt_Shuffle);
-        btPrevious = (ImageView) findViewById(R.id.bt_Previous);
-        btNext = (ImageView) findViewById(R.id.bt_Next);
+//        btShuffle = (ImageView) findViewById(R.id.bt_Shuffle);
+//        btPrevious = (ImageView) findViewById(R.id.bt_Previous);
+//        btNext = (ImageView) findViewById(R.id.bt_Next);
         btRepeat = (ImageView) findViewById(R.id.bt_Repeat);
         btStartPause.setOnClickListener(this);
-        btShuffle.setOnClickListener(this);
-        btPrevious.setOnClickListener(this);
-        btNext.setOnClickListener(this);
-        btRepeat.setOnClickListener(this);
+//        btShuffle.setOnClickListener(this);
+//        btPrevious.setOnClickListener(this);
+//        btNext.setOnClickListener(this);
+//        btRepeat.setOnClickListener(this);
 
         tvSongName = (TextView) findViewById(R.id.tv_SongName2);
+        songImage = (ImageView) findViewById(R.id.songImage);
         tvSongArtist = (TextView) findViewById(R.id.tv_SongArtist2);
-        tvIndex = (TextView) findViewById(R.id.tv_Index);
-        tvTimeSong = (TextView) findViewById(R.id.tv_SongTime2);
+//        tvIndex = (TextView) findViewById(R.id.tv_Index);
+//        tvTimeSong = (TextView) findViewById(R.id.tv_SongTime2);
 
         seekBarPlay = (SeekBar) findViewById(R.id.seekBar);
+        songImage.setOnClickListener(this);
         IS_RUNNING = true;
         startSeekBar.execute();
 
@@ -124,7 +136,7 @@ public class MyActivity extends Activity implements AdapterView.OnItemClickListe
             }
         });
 
-//        mediaManager.play(beginSong);
+       mediaManager.play(beginSong);
         initSongDisplay();
 
     }
@@ -133,7 +145,8 @@ public class MyActivity extends Activity implements AdapterView.OnItemClickListe
         tvSongArtist.setText(mediaManager.getCurrentSongName());
         tvSongName.setText(mediaManager.getCurrentArtist());
         seekBarPlay.setMax(mediaManager.getMaxDuration());
-        tvIndex.setText(mediaManager.getCurrentIndex() + "/" + mediaManager.getArrSongs().size());
+        songImage.setImageBitmap(mediaManager.getImage());
+//        tvIndex.setText(mediaManager.getCurrentIndex() + "/" + mediaManager.getArrSongs().size());
     }
 
     @Override
@@ -151,38 +164,43 @@ public class MyActivity extends Activity implements AdapterView.OnItemClickListe
                     btStartPause.setImageResource(R.drawable.pause);
                 }
                 break;
-            case R.id.bt_Previous:
-                mediaManager.previous();
+            case R.id.songImage:
+                Intent intent2 = new Intent(getApplicationContext(),PlayActivity.class);
+            //    intent2.putExtra("mediaManager",mediaManager);
+                startActivity(intent2);
                 break;
-            case R.id.bt_Next:
-                mediaManager.next();
-                break;
-            case R.id.bt_Shuffle:
-                if (shuffling == NOSHUFFLE) {
-                    Toast.makeText(getApplicationContext(), "Shuffle is ON", Toast.LENGTH_SHORT).show();
-                    mediaManager.shuffle(true);
-                    shuffling = SHUFFLING;
-                    btShuffle.setImageResource(R.drawable.shuffle);
-                } else if (shuffling == SHUFFLING) {
-                    Toast.makeText(getApplicationContext(), "Shuffle is OFF", Toast.LENGTH_SHORT).show();
-                    mediaManager.shuffle(false);
-                    shuffling = NOSHUFFLE;
-                    btShuffle.setImageResource(R.drawable.shuffledisabled);
-                }
-                break;
-            case R.id.bt_Repeat:
-                if (looping == NOLOOP) {
-                    Toast.makeText(getApplicationContext(), "Repeat is ON", Toast.LENGTH_SHORT).show();
-                    mediaManager.repeatSong(true);
-                    looping = LOOPING;
-                    btRepeat.setImageResource(R.drawable.repeat);
-                } else if (looping == LOOPING) {
-                    Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
-                    mediaManager.repeatSong(false);
-                    looping = NOLOOP;
-                    btRepeat.setImageResource(R.drawable.repeatoff);
-                }
-                break;
+//            case R.id.bt_Previous:
+//                mediaManager.previous();
+//                break;
+//            case R.id.bt_Next:
+//                mediaManager.next();
+//                break;
+//            case R.id.bt_Shuffle:
+//                if (shuffling == NOSHUFFLE) {
+//                    Toast.makeText(getApplicationContext(), "Shuffle is ON", Toast.LENGTH_SHORT).show();
+//                    mediaManager.shuffle(true);
+//                    shuffling = SHUFFLING;
+//                    btShuffle.setImageResource(R.drawable.shuffle);
+//                } else if (shuffling == SHUFFLING) {
+//                    Toast.makeText(getApplicationContext(), "Shuffle is OFF", Toast.LENGTH_SHORT).show();
+//                    mediaManager.shuffle(false);
+//                    shuffling = NOSHUFFLE;
+//                    btShuffle.setImageResource(R.drawable.shuffledisabled);
+//                }
+//                break;
+//            case R.id.bt_Repeat:
+//                if (looping == NOLOOP) {
+//                    Toast.makeText(getApplicationContext(), "Repeat is ON", Toast.LENGTH_SHORT).show();
+//                    mediaManager.repeatSong(true);
+//                    looping = LOOPING;
+//                    btRepeat.setImageResource(R.drawable.repeat);
+//                } else if (looping == LOOPING) {
+//                    Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
+//                    mediaManager.repeatSong(false);
+//                    looping = NOLOOP;
+//                    btRepeat.setImageResource(R.drawable.repeatoff);
+//                }
+//                break;
         }
     }
 
@@ -213,8 +231,9 @@ public class MyActivity extends Activity implements AdapterView.OnItemClickListe
             seekBarPlay.setProgress(values[0]);
             tvSongArtist.setText(mediaManager.getCurrentSongName());
             tvSongName.setText(mediaManager.getCurrentArtist());
-            tvTimeSong.setText(convertToDate(values[0]));
-            tvIndex.setText(mediaManager.getCurrentIndex() + "/" + mediaManager.getArrSongs().size());
+            songImage.setImageBitmap(mediaManager.getImage());
+//            tvTimeSong.setText(convertToDate(values[0]));
+//            tvIndex.setText(mediaManager.getCurrentIndex() + "/" + mediaManager.getArrSongs().size());
             if (state == PLAYING) {
                 btStartPause.setImageResource(R.drawable.pause);
             }
@@ -267,6 +286,8 @@ public class MyActivity extends Activity implements AdapterView.OnItemClickListe
             mediaManager.stop();
         }
         mediaManager.play(position);
+        initSongDisplay();
+
     }
 
     private void toPlaySongActivity() {
@@ -360,13 +381,16 @@ public class MyActivity extends Activity implements AdapterView.OnItemClickListe
     public void onShake(int count) {
         Toast.makeText(getApplicationContext(),"Lac lac",Toast.LENGTH_LONG).show();
         mediaManager.next();
+        initSongDisplay();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        initSongDisplay();
         // Add the following line to register the Session Manager Listener onResume
         mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
+
     }
 
     @Override

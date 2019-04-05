@@ -29,6 +29,9 @@ import com.man.manmusic.Sensor.ShakeDetector;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import static com.man.manmusic.MyActivity.mediaManager;
+
+
 
 public class PlayActivity extends AppCompatActivity implements View.OnClickListener,ShakeDetector.OnShakeListener {
     private static final String PLAYING = "STATE_PLAY";
@@ -38,11 +41,11 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView songImage;
     private BlurImageView blurImageView;
     private SeekBar seekBarPlay;
-    private MediaManager mediaManager;
+//    public MediaManager mediaManager;
     private ImageView menuback,menusearch;
     private static int beginSong;
     private static String state;
-    private static boolean IS_RUNNING = false;
+    private static boolean IS_RUNNING = true;
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -52,6 +55,15 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playsong2);
+
+//        Bundle extras = getIntent().getExtras();
+//        if (extras != null) {
+//            mediaManager = (MediaManager) getIntent().getSerializableExtra("mediaManager"); //Obtaining data
+//
+//        }else {
+           //   mediaManager = new MediaManager(this);
+//        }
+
 
         menuback=(ImageView) findViewById(R.id.menuback);
         menusearch=(ImageView) findViewById(R.id.menusearch);
@@ -77,6 +89,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
 
 
         initView();
+        initSongDisplay();
 
 
 
@@ -97,6 +110,8 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         btNext = (ImageView) findViewById(R.id.bt_Next);
         btRepeat = (ImageView) findViewById(R.id.bt_Repeat);
         songImage = (ImageView) findViewById(R.id.songImage);
+
+
         blurImageView=(BlurImageView) findViewById(R.id.album_art_blurred) ;
 
 
@@ -115,19 +130,19 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         btPrevious.setOnClickListener(this);
         btNext.setOnClickListener(this);
         btRepeat.setOnClickListener(this);
+        mCoverView.setOnClickListener(this);
 
         tvSongName = (TextView) findViewById(R.id.tv_SongName2);
         tvSongArtist = (TextView) findViewById(R.id.tv_SongArtist2);
        // tvIndex = (TextView) findViewById(R.id.tv_Index);
         tvTimeSong = (TextView) findViewById(R.id.tv_SongTime2);
+        mediaManager.getAllAudioSongs();
 
         seekBarPlay = (SeekBar) findViewById(R.id.seekBar);
 
-        mediaManager = new MediaManager(this);
-        mediaManager.getAllAudioSongs();
-
 
         IS_RUNNING = true;
+
         startSeekBar.execute();
 
         seekBarPlay.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -148,21 +163,21 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         mediaManager.play(beginSong);
+
         if(!mCoverView.isRunning()){
             mCoverView.morph();
         }
         initSongDisplay();
+
     }
 
-    private void seekTo(int progress) {
-        mediaManager.seekTo(progress);
-    }
+
 
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_StartPause:
+            case R.id.cover:
                 if (state == PLAYING ) {
                     mediaManager.pause();
 
@@ -192,21 +207,18 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menuback:
                 onBackPressed();
                 break;
-            case R.id.menusearch:
-                Intent intent = new Intent(getApplicationContext(),MyActivity.class);
-                startActivity(intent);
-                break;
+//            case R.id.menusearch:
+//                Intent intent = new Intent(getApplicationContext(),MyActivity.class);
+//                startActivity(intent);
+//                break;
+
         }
     }
 
     private void initSongDisplay() {
         Bitmap artWork = mediaManager.getImage();
         if (artWork == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("this podcast have no image");
-            builder.setNeutralButton("OK", null);
-            AlertDialog alert = builder.create();
-            alert.show();
+
 
         } else {
 
@@ -222,7 +234,9 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         seekBarPlay.setMax(mediaManager.getMaxDuration());
       //  tvIndex.setText(mediaManager.getCurrentIndex() + "/" + mediaManager.getArrSongs().size());
     }
-
+    private void seekTo(int progress) {
+        mediaManager.seekTo(progress);
+    }
     private AsyncTask<Void, Integer, Void> startSeekBar = new AsyncTask<Void, Integer, Void>() {
 
         @Override
@@ -244,8 +258,26 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onProgressUpdate(Integer... values) {
             seekBarPlay.setProgress(values[0]);
-            tvTimeSong.setText(convertToDate(values[0]));
-          //  tvIndex.setText(mediaManager.getCurrentIndex() + "/" + mediaManager.getArrSongs().size());
+            tvSongArtist.setText(mediaManager.getCurrentSongName());
+            tvSongName.setText(mediaManager.getCurrentArtist());
+            Bitmap artWork = mediaManager.getImage();
+            if (artWork == null) {
+
+
+            } else {
+
+                // set output
+                songImage.setImageBitmap(artWork);
+                mCoverView.setImageBitmap(artWork);
+                blurImageView.setImageBitmap(artWork);
+                blurImageView.setBlur(2);
+
+            }
+//            tvTimeSong.setText(convertToDate(values[0]));
+//            tvIndex.setText(mediaManager.getCurrentIndex() + "/" + mediaManager.getArrSongs().size());
+            if (state == PLAYING) {
+                btStartPause.setImageResource(R.drawable.pause);
+            }
         }
     };
 
